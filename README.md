@@ -15,7 +15,7 @@ Simplement avec la commande:
 ./install.sh
 ```
 
-## Lancer le vérificateur
+## Lancer l'outil
 Simplement avec la commande:
 ```
 ./start.sh fichier_des_sites
