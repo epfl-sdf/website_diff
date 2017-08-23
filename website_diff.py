@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 #import pillow
 import csv
 from PIL import Image
