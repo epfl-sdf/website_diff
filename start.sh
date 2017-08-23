@@ -4,6 +4,6 @@ credFile="../credentials/credentials.csv"
 
 source $virtFold/bin/activate
 PATH="$PATH:$(pwd)"
-./website_diff.py $credFile
+python3 website_diff.py $credFile
 deactivate
 
