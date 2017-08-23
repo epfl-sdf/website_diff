@@ -18,7 +18,7 @@ Simplement avec la commande:
 ## Lancer le vérificateur
 Simplement avec la commande:
 ```
-./start.sh
+./start.sh fichier_des_sites
 ```
 
 `fichier_des_sites` est le fichier contenant les sites a tester. 
