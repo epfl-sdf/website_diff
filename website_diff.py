@@ -99,7 +99,7 @@ def compare_sites(args):
         url_wp = parts[2]
         site_title = parts[3]
 
-        timestamp = str(datetime.now())
+        timestamp = datetime.now().strftime('%Y%m%d.%H%M%S')
         filename_jahia = site_title + '_jahia'+ timestamp +'.png'
         filename_wp = site_title + '_wp' + timestamp +'.png'
         screenshot(url_jahia, filename_jahia)
@@ -107,6 +107,9 @@ def compare_sites(args):
         coeff = 1 / diff_image_color(filename_jahia, filename_wp)
 
         print(','.join((site_title, url_jahia, url_wp, str(coeff), timestamp)), file = output_file)
+
+    input_file.close()
+    output_file.close()
 
 def get_parser():
     """ Obtiens un parser les arguments de ligne de commande. """
