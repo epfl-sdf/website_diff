@@ -15,6 +15,8 @@ from selenium import webdriver
 
 from pyvirtualdisplay import Display
 
+from version import __version__
+
 Size = collections.namedtuple("size", ("x", "y"))
 WAIT_TIME = 10
 
@@ -115,6 +117,8 @@ def get_parser():
     """ Obtiens un parser les arguments de ligne de commande. """
     parser = argparse.ArgumentParser(description='Parser des liens sur les sites Jahia et Wordpress.')
     parser.add_argument('ficher_des_sites', help='le fichier contenant les sites a parser.')
+    parser.add_argument('-v', '--version', help='affiche la version du parser',
+                        action='version', version='%(prog)s ' + __version__)
     return parser
 
 if __name__ == "__main__":
@@ -125,5 +129,6 @@ if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
 
+    print('website_diff version ' + __version__)
     compare_sites(args)
 
