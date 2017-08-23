@@ -9,6 +9,7 @@ import os
 import glob
 import collections
 import argparse
+from datetime import datetime
 
 from selenium import webdriver
 
@@ -68,11 +69,11 @@ def diff_image_feature(image0, image1):
     """
     return 0
 
-def screenshot(url, index, alter=None, browser=''):
+def screenshot(url, path, alter=None, browser=''):
     profile = webdriver.FirefoxProfile()
-    #profile.set_preference('network.proxy.type', 1)
-    #profile.set_preference('network.proxy.http', '10.92.104.219')
-    #profile.set_preference('network.proxy.http_port', 8080)
+    profile.set_preference('network.proxy.type', 1)
+    profile.set_preference('network.proxy.http', '10.92.104.219')
+    profile.set_preference('network.proxy.http_port', 8080)
     
     browser = webdriver.Firefox(profile)
 
@@ -84,17 +85,28 @@ def screenshot(url, index, alter=None, browser=''):
         browser.set_window_size(size.x, size.y)
         #wait for the site to adapt
         time.sleep(0.3)
-        path = 'screenshot_' + str(index) + '.png'
         browser.save_screenshot(path)
     browser.quit()
 
 def compare_sites(args):
-    input_file = open(args.ficher_des_sites)
+    input_file = open(args.ficher_des_sites, 'r')
+    output_file = open('coeffs.csv', 'a')
+    next(input_file)
+
     for line in input_file:
         parts = line.split(',')
         url_jahia = parts[1]
         url_wp = parts[2]
         site_title = parts[3]
+
+        timestamp = str(datetime.now())
+        filename_jahia = site_title + '_jahia'+ timestamp +'.png'
+        filename_wp = site_title + '_wp' + timestamp +'.png'
+        screenshot(url_jahia, filename_jahia)
+        screenshot(url_wp, filename_wp)
+        coeff = 1 / diff_image_color(filename_jahia, filename_wp)
+
+        print(','.join((site_title, url_jahia, url_wp, str(coeff), timestamp)), file = output_file)
 
 def get_parser():
     """ Obtiens un parser les arguments de ligne de commande. """
