@@ -1,8 +1,11 @@
 import argparse
 
-def make_data(args):
-    input_file = open(args.ficher_des_sites, 'r')
-    output_file = open(args.fichier_cible, 'w')
+INPUT_FILE= '../credentials/credentials.csv'
+OUTPUT_FILE= '../data_web_diff/sites.csv'
+
+def make_data():
+    input_file = open(INPUT_FILE, 'r')
+    output_file = open(OUTPUT_FILE, 'w')
     next(input_file)
     print('name, url1, url2', file = output_file)
 
@@ -17,16 +20,5 @@ def make_data(args):
     input_file.close()
     output_file.close()
 
-def get_parser():
-    """ Obtiens un parser les arguments de ligne de commande. """
-    parser = argparse.ArgumentParser(description='Parser des liens sur les sites Jahia et Wordpress.')
-    parser.add_argument('ficher_des_sites', help='le fichier contenant les sites a parser.')
-    parser.add_argument('fichier_cible', help='le fichier du résultat.')
-    return parser
-
 if __name__ == "__main__":
-    # Parser des arguments des lignes de commande.
-    parser = get_parser()
-    args = parser.parse_args()
-
-    make_data(args)
+    make_data()

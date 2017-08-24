@@ -1,14 +1,6 @@
 #!/bin/bash
 virtFold="venv"
-
-if (( $# < 1 ))
-then
-    echo "Erreur: pas assez d'arguments
-    usage: ./start.sh fichier_des_sites"
-    exit
-fi
-
-credFile=$1
+credFile="../data_web_diff/sites.csv"
 
 source $virtFold/bin/activate
 PATH="$PATH:$(pwd)"
