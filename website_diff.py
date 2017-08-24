@@ -16,6 +16,9 @@ from pyvirtualdisplay import Display
 
 from version import __version__
 
+sites_path = '../data_web_diff/sites.csv'
+result_path = '../data_web_diff/result.csv'
+screenshot_dir = '../data_web_diff/copy_screen/' 
 Size = collections.namedtuple("size", ("x", "y"))
 WAIT_TIME = 10
 
@@ -89,9 +92,9 @@ def screenshot(url, path, alter=None, browser=''):
         browser.save_screenshot(path)
     browser.quit()
 
-def compare_sites(args):
-    input_file = open(args.ficher_des_sites, 'r')
-    output_file = open('../data_web_diff/result.csv', 'a')
+def compare_sites():
+    input_file = open(sites_path, 'r')
+    output_file = open(result_path, 'a')
     next(input_file)
 
     for line in input_file:
@@ -101,8 +104,8 @@ def compare_sites(args):
         site_title = parts[0].strip()
 
         timestamp = datetime.now().strftime('%Y%m%d.%H%M%S')
-        filename_jahia = '../data_web_diff/copy_screen/' + site_title + '_jahia'+ timestamp +'.png'
-        filename_wp = '../data_web_diff/copy_screen/' + site_title + '_wp' + timestamp +'.png'
+        filename_jahia = screenshot_dir + site_title + '_jahia'+ timestamp +'.png'
+        filename_wp = screenshot_dir + site_title + '_wp' + timestamp +'.png'
         screenshot(url_jahia, filename_jahia)
         screenshot(url_wp, filename_wp)
         coeff = 1 / diff_image_color(filename_jahia, filename_wp)
@@ -112,22 +115,10 @@ def compare_sites(args):
     input_file.close()
     output_file.close()
 
-def get_parser():
-    """ Obtiens un parser les arguments de ligne de commande. """
-    parser = argparse.ArgumentParser(description='Parser des liens sur les sites Jahia et Wordpress.')
-    parser.add_argument('ficher_des_sites', help='le fichier contenant les sites a parser.')
-    parser.add_argument('-v', '--version', help='affiche la version du parser',
-                        action='version', version='%(prog)s ' + __version__)
-    return parser
-
 if __name__ == "__main__":
     display = Display(visible=0, size=(800, 600))
     display.start()
 
-    # Parser des arguments des lignes de commande.
-    parser = get_parser()
-    args = parser.parse_args()
-
     print('website_diff version ' + __version__)
-    compare_sites(args)
+    compare_sites()
 
