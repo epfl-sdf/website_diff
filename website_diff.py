@@ -11,6 +11,10 @@ import timeit
 from PIL import Image
 from datetime import datetime
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import WebDriverException
 from urllib.parse import urlparse
 from pyvirtualdisplay import Display
 from version import __version__
@@ -23,7 +27,7 @@ Size = collections.namedtuple("size", ("x", "y"))
 WAIT_TIME = 10
 
 # Pour permettre d'afficher le temps
-PRINT_TIME = False
+PRINT_TIME = True
 def print_time(message, start_time):
     if PRINT_TIME:
         print(message,timeit.default_timer() - start_time)
@@ -79,9 +83,15 @@ def diff_image_feature(image0, image1):
     return 0
 
 def screenshot(url, path, alter=None, browser=''):
+    print('hello')
     start_time = timeit.default_timer()
     browser.get(url)
-    time.sleep(WAIT_TIME)
+    #time.sleep(WAIT_TIME)
+    try:
+        element = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.ID, 'nav-logo')))
+    except WebDriverException:
+        screenshot(url, path, alter, browser)
+        return
     page = browser.page_source
     for size in SIZES:
         browser.set_window_position(0, 0)
