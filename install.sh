@@ -1,4 +1,9 @@
 #!/bin/bash
+# petit script pour installer la comparaison visuelle de pages WEB
+#170824.1452
+
+#source:
+
 virtFold="venv"
 dataFold="../data_web_diff"
 screenFold="copy_screen"

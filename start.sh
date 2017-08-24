@@ -1,4 +1,10 @@
 #!/bin/bash
+# petit script pour démarrer la comparaison visuelle de pages WEB
+#170824.1452
+
+#source: 
+
+
 
 date
 
