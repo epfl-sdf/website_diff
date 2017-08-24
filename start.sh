@@ -1,6 +1,6 @@
 #!/bin/bash
 virtFold="venv"
-credFile="../credentials/credentials.csv"
+credFile="../credentials/test-credentials.csv"
 
 source $virtFold/bin/activate
 PATH="$PATH:$(pwd)"

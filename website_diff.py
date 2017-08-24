@@ -1,20 +1,20 @@
 import csv
-from PIL import Image
 import math
 import numpy as np
-from urllib.parse import urlparse
 import time
 import os
 import glob
 import collections
 import argparse
+import timeit
+
+from PIL import Image
 from datetime import datetime
-
 from selenium import webdriver
-
+from urllib.parse import urlparse
 from pyvirtualdisplay import Display
-
 from version import __version__
+
 
 Size = collections.namedtuple("size", ("x", "y"))
 WAIT_TIME = 10
@@ -63,7 +63,6 @@ def diff_image_color(image_path0, image_path1):
     color_difference = bhattacharyya(color_image0, color_image1)
     return color_difference
 
-
 def diff_image_feature(image0, image1):
     """Return similarity of image clamped between 0 and 1
     on feature.
@@ -71,13 +70,7 @@ def diff_image_feature(image0, image1):
     return 0
 
 def screenshot(url, path, alter=None, browser=''):
-    profile = webdriver.FirefoxProfile()
-    profile.set_preference('network.proxy.type', 1)
-    profile.set_preference('network.proxy.http', '10.92.104.219')
-    profile.set_preference('network.proxy.http_port', 8080)
-    
-    browser = webdriver.Firefox(profile)
-
+    start_time = timeit.default_timer()
     browser.get(url)
     time.sleep(WAIT_TIME)
     page = browser.page_source
@@ -87,14 +80,25 @@ def screenshot(url, path, alter=None, browser=''):
         #wait for the site to adapt
         time.sleep(0.3)
         browser.save_screenshot(path)
-    browser.quit()
+    print('screenshot: ',timeit.default_timer() - start_time)
 
 def compare_sites(args):
+    start_time = timeit.default_timer()
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference('network.proxy.type', 1)
+    profile.set_preference('network.proxy.http', '10.92.104.219')
+    profile.set_preference('network.proxy.http_port', 8080)
+    print('init profile: ',timeit.default_timer() - start_time)
+
+    start_time = timeit.default_timer()
+    browser = webdriver.Firefox(profile)
+    print('init browser: ',timeit.default_timer() - start_time)
     input_file = open(args.ficher_des_sites, 'r')
     output_file = open('coeffs.csv', 'a')
     next(input_file)
 
     for line in input_file:
+        start_time = timeit.default_timer()
         parts = line.split(',')
         url_jahia = parts[1]
         url_wp = parts[2]
@@ -103,12 +107,13 @@ def compare_sites(args):
         timestamp = datetime.now().strftime('%Y%m%d.%H%M%S')
         filename_jahia = site_title + '_jahia'+ timestamp +'.png'
         filename_wp = site_title + '_wp' + timestamp +'.png'
-        screenshot(url_jahia, filename_jahia)
-        screenshot(url_wp, filename_wp)
+        screenshot(url_jahia, filename_jahia, browser=browser)
+        screenshot(url_wp, filename_wp, browser=browser)
         coeff = 1 / diff_image_color(filename_jahia, filename_wp)
-
         print(','.join((site_title, url_jahia, url_wp, str(coeff), timestamp)), file = output_file)
+        print('compare ',site_title, ': ',timeit.default_timer() - start_time)
 
+    browser.quit()
     input_file.close()
     output_file.close()
 
