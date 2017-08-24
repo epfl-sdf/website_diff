@@ -80,6 +80,15 @@ def diff_image_feature(image0, image1):
 
 def screenshot(url, path, alter=None, browser=''):
     start_time = timeit.default_timer()
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference('network.proxy.type', 1)
+    profile.set_preference('network.proxy.http', '10.92.104.219')
+    profile.set_preference('network.proxy.http_port', 8080)
+    profile.set_preference('network.proxy.ssl', '10.92.104.219')
+    profile.set_preference('network.proxy.ssl_port', 8080)
+    
+    browser = webdriver.Firefox(profile)
+
     browser.get(url)
     time.sleep(WAIT_TIME)
     page = browser.page_source
