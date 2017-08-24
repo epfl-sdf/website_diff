@@ -91,18 +91,18 @@ def screenshot(url, path, alter=None, browser=''):
 
 def compare_sites(args):
     input_file = open(args.ficher_des_sites, 'r')
-    output_file = open('coeffs.csv', 'a')
+    output_file = open('../data_web_diff/result.csv', 'a')
     next(input_file)
 
     for line in input_file:
         parts = line.split(',')
-        url_jahia = parts[1]
-        url_wp = parts[2]
-        site_title = parts[3]
+        url_jahia = parts[1].strip()
+        url_wp = parts[2].strip()
+        site_title = parts[0].strip()
 
         timestamp = datetime.now().strftime('%Y%m%d.%H%M%S')
-        filename_jahia = site_title + '_jahia'+ timestamp +'.png'
-        filename_wp = site_title + '_wp' + timestamp +'.png'
+        filename_jahia = '../data_web_diff/copy_screen/' + site_title + '_jahia'+ timestamp +'.png'
+        filename_wp = '../data_web_diff/copy_screen/' + site_title + '_wp' + timestamp +'.png'
         screenshot(url_jahia, filename_jahia)
         screenshot(url_wp, filename_wp)
         coeff = 1 / diff_image_color(filename_jahia, filename_wp)
