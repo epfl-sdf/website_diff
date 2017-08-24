@@ -15,12 +15,15 @@ from urllib.parse import urlparse
 from pyvirtualdisplay import Display
 from version import __version__
 
+sites_path = '../data_web_diff/sites.csv'
+result_path = '../data_web_diff/result.csv'
+screenshot_dir = '../data_web_diff/copy_screen/' 
 
 Size = collections.namedtuple("size", ("x", "y"))
 WAIT_TIME = 10
 
 # Pour permettre d'afficher le temps
-PRINT_TIME = False
+PRINT_TIME = True
 def print_time(message, start_time):
     if PRINT_TIME:
         print(message,timeit.default_timer() - start_time)
@@ -88,7 +91,7 @@ def screenshot(url, path, alter=None, browser=''):
         browser.save_screenshot(path)
     print_time('screenshot: ', start_time)
 
-def compare_sites(args):
+def compare_sites():
     start_time = timeit.default_timer()
     profile = webdriver.FirefoxProfile()
     profile.set_preference('network.proxy.type', 1)
@@ -99,20 +102,21 @@ def compare_sites(args):
     start_time = timeit.default_timer()
     browser = webdriver.Firefox(profile)
     print_time('init browser: ',start_time)
-    input_file = open(args.ficher_des_sites, 'r')
-    output_file = open('coeffs.csv', 'a')
+    input_file = open(sites_path, 'r')
+    output_file = open(result_path, 'a')
+
     next(input_file)
 
     for line in input_file:
         start_time = timeit.default_timer()
         parts = line.split(',')
-        url_jahia = parts[1]
-        url_wp = parts[2]
-        site_title = parts[3]
+        url_jahia = parts[1].strip()
+        url_wp = parts[2].strip()
+        site_title = parts[0].strip()
 
         timestamp = datetime.now().strftime('%Y%m%d.%H%M%S')
-        filename_jahia = site_title + '_jahia'+ timestamp +'.png'
-        filename_wp = site_title + '_wp' + timestamp +'.png'
+        filename_jahia = screenshot_dir + site_title + '_jahia'+ timestamp +'.png'
+        filename_wp = screenshot_dir + site_title + '_wp' + timestamp +'.png'
         screenshot(url_jahia, filename_jahia, browser=browser)
         screenshot(url_wp, filename_wp, browser=browser)
         coeff = 1 / diff_image_color(filename_jahia, filename_wp)
@@ -123,23 +127,12 @@ def compare_sites(args):
     input_file.close()
     output_file.close()
 
-def get_parser():
-    """ Obtiens un parser les arguments de ligne de commande. """
-    parser = argparse.ArgumentParser(description='Parser des liens sur les sites Jahia et Wordpress.')
-    parser.add_argument('ficher_des_sites', help='le fichier contenant les sites a parser.')
-    parser.add_argument('-v', '--version', help='affiche la version du parser',
-                        action='version', version='%(prog)s ' + __version__)
-    return parser
-
 if __name__ == "__main__":
     start_time = timeit.default_timer()
     display = Display(visible=0, size=(800, 600))
     display.start()
 
-    # Parser des arguments des lignes de commande.
-    parser = get_parser()
-    args = parser.parse_args()
-
     print('website_diff version ' + __version__)
-    compare_sites(args)
+    compare_sites()
     print_time('total: ',start_time)
+

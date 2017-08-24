@@ -103,6 +103,4 @@ ENV/
 geckodriver*/
 geckodriver*
 
-*.png
-*.csv
 *.swp
