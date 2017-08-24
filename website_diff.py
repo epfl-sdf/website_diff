@@ -23,7 +23,7 @@ Size = collections.namedtuple("size", ("x", "y"))
 WAIT_TIME = 10
 
 # Pour permettre d'afficher le temps
-PRINT_TIME = True
+PRINT_TIME = False
 def print_time(message, start_time):
     if PRINT_TIME:
         print(message,timeit.default_timer() - start_time)
