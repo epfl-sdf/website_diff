@@ -19,6 +19,12 @@ from version import __version__
 Size = collections.namedtuple("size", ("x", "y"))
 WAIT_TIME = 10
 
+# Pour permettre d'afficher le temps
+PRINT_TIME = False
+def print_time(message, start_time):
+    if PRINT_TIME:
+        print(message,timeit.default_timer() - start_time)
+
 SIZES = [Size(1080, 1920)]
 
 def cut_histogram_min(h, min_value=10):
@@ -80,7 +86,7 @@ def screenshot(url, path, alter=None, browser=''):
         #wait for the site to adapt
         time.sleep(0.3)
         browser.save_screenshot(path)
-    print('screenshot: ',timeit.default_timer() - start_time)
+    print_time('screenshot: ', start_time)
 
 def compare_sites(args):
     start_time = timeit.default_timer()
@@ -88,11 +94,11 @@ def compare_sites(args):
     profile.set_preference('network.proxy.type', 1)
     profile.set_preference('network.proxy.http', '10.92.104.219')
     profile.set_preference('network.proxy.http_port', 8080)
-    print('init profile: ',timeit.default_timer() - start_time)
+    print_time('init profile: ',start_time)
 
     start_time = timeit.default_timer()
     browser = webdriver.Firefox(profile)
-    print('init browser: ',timeit.default_timer() - start_time)
+    print_time('init browser: ',start_time)
     input_file = open(args.ficher_des_sites, 'r')
     output_file = open('coeffs.csv', 'a')
     next(input_file)
@@ -111,7 +117,7 @@ def compare_sites(args):
         screenshot(url_wp, filename_wp, browser=browser)
         coeff = 1 / diff_image_color(filename_jahia, filename_wp)
         print(','.join((site_title, url_jahia, url_wp, str(coeff), timestamp)), file = output_file)
-        print('compare ',site_title, ': ',timeit.default_timer() - start_time)
+        print_time('compare ' + site_title + ': ',start_time)
 
     browser.quit()
     input_file.close()
@@ -126,6 +132,7 @@ def get_parser():
     return parser
 
 if __name__ == "__main__":
+    start_time = timeit.default_timer()
     display = Display(visible=0, size=(800, 600))
     display.start()
 
@@ -135,4 +142,4 @@ if __name__ == "__main__":
 
     print('website_diff version ' + __version__)
     compare_sites(args)
-
+    print_time('total: ',start_time)

@@ -1,4 +1,6 @@
 #!/bin/bash
+pkill firefox
+pkill Xvfb
 virtFold="venv"
 credFile="../credentials/test-credentials.csv"
 
