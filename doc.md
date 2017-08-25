@@ -38,7 +38,7 @@ Ensuite, il faut lancer la commande suivante:
 ./make_data
 ```
 
-Qui va créer un fichier `sites.csv` qui va contenir les sites a comparer
+Qui va créer un fichier `sites.csv` qui va contenir les sites à comparer
 par le programme. Pour cela, nous avons besoin d'un fichier d'où tirer ces
 sites. Dans l'état actuel, il faut avoir un fichier `credentials.csv`
 dans la structure de dossier suivante:
@@ -56,7 +56,7 @@ du filtre:
 * La troisème colonne est l'URL du deuxième site de la comparaison
 * La quatrième colonne doit être le titre du site
 
-Ce fichier sera un fichier `.csv` dont les colonnes sont séparés par des virgules et
+Le fichier `sites.csv` sera un fichier `.csv` dont les colonnes sont séparées par des virgules et
 elles sont les suivantes:
 * `name` qui est le nom du test, obtenu içi à partir du nom du site du
   fichier source
@@ -69,18 +69,18 @@ Simplement avec la commande:
 ./start.sh
 ```
 Cette commande nécessite la présance du fichier `sites.csv` placé au bon
-endroit comme l'explique la section précedante de ce document.
+endroit comme l'explique la section précédante de ce document.
 
-# Expliquation du logiciel
+# Explication du logiciel
 
-Ce logiciel sert a faire des comparaisons chromatique entre des pages WEB. Pour
+Ce logiciel sert à faire des comparaisons chromatiques entre des pages WEB. Pour
 cela, il crée un histograme des pixels présents sur la page et il calcule la
 distance entre ces deux histogrammes selon la [distance de Bhattacharyya](https://fr.wikipedia.org/wiki/Distance_de_Bhattacharyya).
-Le coefficient retournée dans le résultat est plus grand si les sites sont similaires
+Le coefficient retourné dans le résultat est plus grand si les sites sont similaires
 et plus petit sinon.
 
-Le logiciel utilise selenium pour automatiser un navigateur web (Firefox) pour
-charger les pages a comparer et faire 2 copies d'écrans de ces pages a comparer.
-Ensuite, la librairie Pillow est utilisé pour charger ces deux images dans le code
-et calculer l'histogramme des pixels dans la copie-d'écran. Ensuite, on utilise Numpy
+Le logiciel utilise Selenium pour automatiser un navigateur web (Firefox) pour
+charger les pages à comparer et faire 2 copies d'écrans de ces pages.
+Ensuite, la librairie Pillow est utilisée pour charger ces deux images dans le code
+et calculer leur histogramme des pixels. Ensuite, on utilise Numpy
 pour effectuer les calculs nécessaires pour la distance de Bhattacharyya.
