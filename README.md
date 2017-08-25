@@ -15,10 +15,15 @@ Simplement avec la commande:
 ./install.sh
 ```
 
+Pour préparer les données, il faut lancer:
+```
+python3 make_data.py
+```
+
+Ceci nécessite la présance d'un fichier `../credentials/credentials.csv`.
+
 ## Lancer le vérificateur
 Simplement avec la commande:
 ```
-./start.sh fichier_des_sites
+./start.sh
 ```
-
-`fichier_des_sites` est le fichier contenant les sites a tester. 
