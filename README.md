@@ -17,7 +17,7 @@ Simplement avec la commande:
 
 Pour préparer les données, il faut lancer:
 ```
-python3 make_data.py
+./make_data.py
 ```
 
 Ceci nécessite la présance d'un fichier `../credentials/credentials.csv`.
